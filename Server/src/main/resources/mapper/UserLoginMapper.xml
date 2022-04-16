@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kbz1121.CarStore.dao.UserLoginDao">
+
+    <resultMap type="com.kbz1121.CarStore.entity.UserLogin" id="UserLoginMap">
+        <result property="token" column="token" jdbcType="VARCHAR"/>
+        <result property="userFk" column="user_fk" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="validFlag" column="valid_flag" jdbcType="INTEGER"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserLoginMap">
+        select
+          token, user_fk, create_time, update_time, valid_flag, type
+        from user_login
+        where token = #{token} and valid_flag = 1
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserLoginMap">
+        select
+          token, user_fk, create_time, update_time, valid_flag, type
+        from user_login
+        <where>
+            <if test="userLogin.token != null and userLogin.token != ''">
+                and token = #{userLogin.token}
+            </if>
+            <if test="userLogin.userFk != null">
+                and user_fk = #{userLogin.userFk}
+            </if>
+            <if test="userLogin.createTime != null">
+                and create_time = #{userLogin.createTime}
+            </if>
+            <if test="userLogin.updateTime != null">
+                and update_time = #{userLogin.updateTime}
+            </if>
+            <if test="userLogin.validFlag != null">
+                and valid_flag = #{userLogin.validFlag}
+            </if>
+            <if test="userLogin.type != null">
+                and type = #{userLogin.type}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+    
+        <!--查询全部数据-->
+    <select id="queryAll" resultMap="UserLoginMap">
+        select
+          token, user_fk, create_time, update_time, valid_flag, type
+        from user_login
+        <where>
+            <if test="token != null and token != ''">
+                and token = #{token}
+            </if>
+            <if test="userFk != null">
+                and user_fk = #{userFk}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="validFlag != null">
+                and valid_flag = #{validFlag}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+        </where>
+    </select>
+    
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from user_login
+        <where>
+            <if test="token != null and token != ''">
+                and token = #{token}
+            </if>
+            <if test="userFk != null">
+                and user_fk = #{userFk}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="validFlag != null">
+                and valid_flag = #{validFlag}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="token" useGeneratedKeys="true">
+        insert into user_login(token, user_fk, create_time, update_time, valid_flag, type)
+        values (#{token},#{userFk}, #{createTime}, #{updateTime}, #{validFlag}, #{type})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="token" useGeneratedKeys="true">
+        insert into user_login(user_fk, create_time, update_time, valid_flag, type)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userFk}, #{entity.createTime}, #{entity.updateTime}, #{entity.validFlag}, #{entity.type})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="token" useGeneratedKeys="true">
+        insert into user_login(user_fk, create_time, update_time, valid_flag, type)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userFk}, #{entity.createTime}, #{entity.updateTime}, #{entity.validFlag}, #{entity.type})
+        </foreach>
+        on duplicate key update
+        user_fk = values(user_fk),
+        create_time = values(create_time),
+        update_time = values(update_time),
+        valid_flag = values(valid_flag),
+        type = values(type)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update user_login
+        <set>
+            <if test="userFk != null">
+                user_fk = #{userFk},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="validFlag != null">
+                valid_flag = #{validFlag},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+        </set>
+        where token = #{token}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from user_login where token = #{token}
+    </delete>
+
+</mapper>

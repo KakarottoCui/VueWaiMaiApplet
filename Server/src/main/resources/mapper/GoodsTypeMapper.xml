@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kbz1121.CarStore.dao.GoodsTypeDao">
+
+    <resultMap type="com.kbz1121.CarStore.entity.GoodsType" id="GoodsTypeMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="validFlag" column="valid_flag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="GoodsTypeMap">
+        select
+          id, name, type, valid_flag
+        from goods_type
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="GoodsTypeMap">
+        select
+          id, name, type, valid_flag
+        from goods_type
+        <where>
+            <if test="goodsType.id != null">
+                and id = #{goodsType.id}
+            </if>
+            <if test="goodsType.name != null and goodsType.name != ''">
+                and name = #{goodsType.name}
+            </if>
+            <if test="goodsType.type != null">
+                and type = #{goodsType.type}
+            </if>
+            <if test="goodsType.validFlag != null">
+                and valid_flag = #{goodsType.validFlag}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+    
+        <!--查询全部数据-->
+    <select id="queryAll" resultMap="GoodsTypeMap">
+        select
+          id, name, type, valid_flag
+        from goods_type
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="validFlag != null">
+                and valid_flag = #{validFlag}
+            </if>
+        </where>
+    </select>
+    
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from goods_type
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="validFlag != null">
+                and valid_flag = #{validFlag}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into goods_type(name, type, valid_flag)
+        values (#{name}, #{type}, #{validFlag})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into goods_type(name, type, valid_flag)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.name}, #{entity.type}, #{entity.validFlag})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into goods_type(name, type, valid_flag)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.type}, #{entity.validFlag})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        type = values(type),
+        valid_flag = values(valid_flag)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update goods_type
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="validFlag != null">
+                valid_flag = #{validFlag},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from goods_type where id = #{id}
+    </delete>
+
+</mapper>

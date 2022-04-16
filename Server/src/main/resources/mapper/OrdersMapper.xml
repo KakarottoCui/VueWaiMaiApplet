@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kbz1121.CarStore.dao.OrdersDao">
+
+    <resultMap type="com.kbz1121.CarStore.entity.Orders" id="OrdersMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userFk" column="user_fk" jdbcType="INTEGER"/>
+        <result property="storeFk" column="store_fk" jdbcType="INTEGER"/>
+        <result property="stat" column="stat" jdbcType="INTEGER"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="priceAll" column="price_all" jdbcType="NUMERIC"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="payTime" column="pay_time" jdbcType="TIMESTAMP"/>
+        <result property="memo" column="memo" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="OrdersMap">
+        select
+          id, user_fk, store_fk, stat, address, phone, user_name, price_all, create_time, update_time, pay_time, memo
+        from orders
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="OrdersMap">
+        select
+          id, user_fk, store_fk, stat, address, phone, user_name, price_all, create_time, update_time, pay_time, memo
+        from orders
+        <where>
+            <if test="orders.id != null">
+                and id = #{orders.id}
+            </if>
+            <if test="orders.userFk != null">
+                and user_fk = #{orders.userFk}
+            </if>
+            <if test="orders.storeFk != null">
+                and store_fk = #{orders.storeFk}
+            </if>
+            <if test="orders.stat != null">
+                and stat = #{orders.stat}
+            </if>
+            <if test="orders.address != null and orders.address != ''">
+                and address = #{orders.address}
+            </if>
+            <if test="orders.phone != null and orders.phone != ''">
+                and phone = #{orders.phone}
+            </if>
+            <if test="orders.userName != null and orders.userName != ''">
+                and user_name = #{orders.userName}
+            </if>
+            <if test="orders.priceAll != null">
+                and price_all = #{orders.priceAll}
+            </if>
+            <if test="orders.createTime != null">
+                and create_time = #{orders.createTime}
+            </if>
+            <if test="orders.updateTime != null">
+                and update_time = #{orders.updateTime}
+            </if>
+            <if test="orders.payTime != null">
+                and pay_time = #{orders.payTime}
+            </if>
+            <if test="orders.memo != null and orders.memo != ''">
+                and memo = #{orders.memo}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+    
+        <!--查询全部数据-->
+    <select id="queryAll" resultMap="OrdersMap">
+        select
+          id, user_fk, store_fk, stat, address, phone, user_name, price_all, create_time, update_time, pay_time, memo
+        from orders
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userFk != null">
+                and user_fk = #{userFk}
+            </if>
+            <if test="storeFk != null">
+                and store_fk = #{storeFk}
+            </if>
+            <if test="stat != null">
+                and stat = #{stat}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="priceAll != null">
+                and price_all = #{priceAll}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="payTime != null">
+                and pay_time = #{payTime}
+            </if>
+            <if test="memo != null and memo != ''">
+                and memo = #{memo}
+            </if>
+        </where>
+    </select>
+    
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from orders
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userFk != null">
+                and user_fk = #{userFk}
+            </if>
+            <if test="storeFk != null">
+                and store_fk = #{storeFk}
+            </if>
+            <if test="stat != null">
+                and stat = #{stat}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="priceAll != null">
+                and price_all = #{priceAll}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="payTime != null">
+                and pay_time = #{payTime}
+            </if>
+            <if test="memo != null and memo != ''">
+                and memo = #{memo}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into orders(user_fk, store_fk, stat, address, phone, user_name, price_all, create_time, update_time, pay_time, memo)
+        values (#{userFk}, #{storeFk}, #{stat}, #{address}, #{phone}, #{userName}, #{priceAll}, #{createTime}, #{updateTime}, #{payTime}, #{memo})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into orders(user_fk, store_fk, stat, address, phone, user_name, price_all, create_time, update_time, pay_time, memo)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userFk}, #{entity.storeFk}, #{entity.stat}, #{entity.address}, #{entity.phone}, #{entity.userName}, #{entity.priceAll}, #{entity.createTime}, #{entity.updateTime}, #{entity.payTime}, #{entity.memo})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into orders(user_fk, store_fk, stat, address, phone, user_name, price_all, create_time, update_time, pay_time, memo)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userFk}, #{entity.storeFk}, #{entity.stat}, #{entity.address}, #{entity.phone}, #{entity.userName}, #{entity.priceAll}, #{entity.createTime}, #{entity.updateTime}, #{entity.payTime}, #{entity.memo})
+        </foreach>
+        on duplicate key update
+        user_fk = values(user_fk),
+        store_fk = values(store_fk),
+        stat = values(stat),
+        address = values(address),
+        phone = values(phone),
+        user_name = values(user_name),
+        price_all = values(price_all),
+        create_time = values(create_time),
+        update_time = values(update_time),
+        pay_time = values(pay_time),
+        memo = values(memo)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update orders
+        <set>
+            <if test="userFk != null">
+                user_fk = #{userFk},
+            </if>
+            <if test="storeFk != null">
+                store_fk = #{storeFk},
+            </if>
+            <if test="stat != null">
+                stat = #{stat},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="priceAll != null">
+                price_all = #{priceAll},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="payTime != null">
+                pay_time = #{payTime},
+            </if>
+            <if test="memo != null and memo != ''">
+                memo = #{memo},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from orders where id = #{id}
+    </delete>
+
+</mapper>

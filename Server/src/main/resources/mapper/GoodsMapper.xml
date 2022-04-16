@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kbz1121.CarStore.dao.GoodsDao">
+
+    <resultMap type="com.kbz1121.CarStore.entity.Goods" id="GoodsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="typeFk" column="type_fk" jdbcType="INTEGER"/>
+        <result property="storeFk" column="store_fk" jdbcType="INTEGER"/>
+        <result property="num" column="num" jdbcType="INTEGER"/>
+        <result property="memo" column="memo" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="VARCHAR"/>
+        <result property="validFlag" column="valid_flag" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="stat" column="stat" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="queryGoods" resultMap="GoodsMap">
+        SELECT g.*,u.uid,u.name as 'uname',s.name as 'sname' FROM goods g LEFT JOIN store s on g.store_fk = s.sid LEFT JOIN user u on s.user_fk = u.uid and g.valid_flag = 1 and s.valid_flag = 1 and u.valid_flag=1
+        <where>
+            <if test=" id != null">
+                and g.id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and g.name like '%${name}%'
+            </if>
+            <if test="stat != null ">
+                and g.stat = #{stat}
+            </if>
+            <if test="storeFk != null ">
+                and g.store_fk = #{storeFk}
+            </if>
+        </where> order by g.stat asc,g.create_time DESC
+    </select>
+    <!--查询单个-->
+    <select id="queryById" resultMap="GoodsMap">
+        select
+          id, name, type_fk, store_fk, num, memo, price, valid_flag, create_time, update_time, stat
+        from goods
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="GoodsMap">
+        select
+          id, name, type_fk, store_fk, num, memo, price, valid_flag, create_time, update_time, stat
+        from goods
+        <where>
+            <if test="goods.id != null">
+                and id = #{goods.id}
+            </if>
+            <if test="goods.name != null and goods.name != ''">
+                and name = #{goods.name}
+            </if>
+            <if test="goods.typeFk != null">
+                and type_fk = #{goods.typeFk}
+            </if>
+            <if test="goods.storeFk != null">
+                and store_fk = #{goods.storeFk}
+            </if>
+            <if test="goods.num != null">
+                and num = #{goods.num}
+            </if>
+            <if test="goods.memo != null and goods.memo != ''">
+                and memo = #{goods.memo}
+            </if>
+            <if test="goods.price != null">
+                and price = #{goods.price}
+            </if>
+            <if test="goods.validFlag != null">
+                and valid_flag = #{goods.validFlag}
+            </if>
+            <if test="goods.createTime != null">
+                and create_time = #{goods.createTime}
+            </if>
+            <if test="goods.updateTime != null">
+                and update_time = #{goods.updateTime}
+            </if>
+            <if test="goods.stat != null">
+                and stat = #{goods.stat}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+    
+        <!--查询全部数据-->
+    <select id="queryAll" resultMap="GoodsMap">
+        select
+          id, name, type_fk, store_fk, num, memo, price, valid_flag, create_time, update_time, stat
+        from goods
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="typeFk != null">
+                and type_fk = #{typeFk}
+            </if>
+            <if test="storeFk != null">
+                and store_fk = #{storeFk}
+            </if>
+            <if test="num != null">
+                and num = #{num}
+            </if>
+            <if test="memo != null and memo != ''">
+                and memo = #{memo}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="validFlag != null">
+                and valid_flag = #{validFlag}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="stat != null">
+                and stat = #{stat}
+            </if>
+        </where>
+    </select>
+    
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from goods
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="typeFk != null">
+                and type_fk = #{typeFk}
+            </if>
+            <if test="storeFk != null">
+                and store_fk = #{storeFk}
+            </if>
+            <if test="num != null">
+                and num = #{num}
+            </if>
+            <if test="memo != null and memo != ''">
+                and memo = #{memo}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="validFlag != null">
+                and valid_flag = #{validFlag}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="stat != null">
+                and stat = #{stat}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into goods(name, type_fk, store_fk, num, memo, price, valid_flag, create_time, update_time, stat)
+        values (#{name}, #{typeFk}, #{storeFk}, #{num}, #{memo}, #{price}, #{validFlag}, #{createTime}, #{updateTime}, #{stat})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into goods(name, type_fk, store_fk, num, memo, price, valid_flag, create_time, update_time, stat)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.name}, #{entity.typeFk}, #{entity.storeFk}, #{entity.num}, #{entity.memo}, #{entity.price}, #{entity.validFlag}, #{entity.createTime}, #{entity.updateTime}, #{entity.stat})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into goods(name, type_fk, store_fk, num, memo, price, valid_flag, create_time, update_time, stat)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.typeFk}, #{entity.storeFk}, #{entity.num}, #{entity.memo}, #{entity.price}, #{entity.validFlag}, #{entity.createTime}, #{entity.updateTime}, #{entity.stat})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        type_fk = values(type_fk),
+        store_fk = values(store_fk),
+        num = values(num),
+        memo = values(memo),
+        price = values(price),
+        valid_flag = values(valid_flag),
+        create_time = values(create_time),
+        update_time = values(update_time),
+        stat = values(stat)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update goods
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="typeFk != null">
+                type_fk = #{typeFk},
+            </if>
+            <if test="storeFk != null">
+                store_fk = #{storeFk},
+            </if>
+            <if test="num != null">
+                num = #{num},
+            </if>
+            <if test="memo != null and memo != ''">
+                memo = #{memo},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="validFlag != null">
+                valid_flag = #{validFlag},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="stat != null">
+                stat = #{stat},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from goods where id = #{id}
+    </delete>
+
+</mapper>
