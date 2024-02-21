@@ -1,5 +1,5 @@
 # VueWaiMaiApplet
-基于JAVA SpringBoot和UniApp的Vue外卖订餐小程序
+基于JAVA,SpringBoot,UniApp,Vue外卖订餐点餐微信小程序
 
 演示视频链接：https://live.csdn.net/v/289415
 
@@ -20,3 +20,5 @@
 后台 JAVA语言的SpringBoot框架、MySql数据库、Maven等；
 
 前台 Vue语法的UniApp框架，可以发布成微信小程序到微信开发者平台
+
+管理员、商家、普通用户都是小程序的版本传送门：https://github.com/KakarottoCui/UniWaiMaiApplet
